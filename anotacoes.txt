@@ -1,0 +1,51 @@
+Autenticação via API
+
+Não existe sessão
+
+Funciona através de TOKEN:
+- Usuário faz o login e acerta as credenciais.
+- O sistema gera um token e associa ao usuário.
+- O token é retornado pela API.
+- As requisições são acompanhadas pelo token
+
+TOKEN PODE SER ENVIADO DE DUAS FORMAS
+
+1 corpo da requisição.
+
+2 Cabeçalhos da requisição. Bearer (authorization)
+
+SANCTUM (config)
+
+composer require laravel/sanctum
+
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+kernel.php
+
+ \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+
+
+ gerando token
+
+ utilizar na model de user: use Laravel\Sanctum\HasApiTokens;
+
+ utilizando SANCTUM
+
+ Criando a rota de login, verificando o usuario, verificar se existe o usuario, caso exista, cria um token desta forma:
+
+ $token = $user->createToken('criar uma string aleatória')->plainTextToken;
+
+ Nas rotas, podemos validar o middleware('auth:sanctum'), na rota que queremos validar
+ Criamos uma rota unauthorization, com name('login'), retornando que o usuário não está logado
+
+EXEMPLO
+
+Route::get('/unauthorization', function(){
+
+    $array['error'] = 'Usuário não está logado';
+
+    return $array;
+
+ });
+
+
